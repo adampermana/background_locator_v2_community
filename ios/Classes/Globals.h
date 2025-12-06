@@ -1,6 +1,6 @@
 //
 //  Constants.h
-//  background_locator_2
+//  background_locator_v2_community
 //
 //  Created by Mehdi Sohrabi on 6/3/20.
 //

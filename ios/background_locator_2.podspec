@@ -2,8 +2,8 @@
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
 #
 Pod::Spec.new do |s|
-  s.name             = 'background_locator_2'
-  s.version          = '0.0.1'
+  s.name             = 'background_locator_v2_community'
+  s.version          = '2.1.0'
   s.summary          = 'A Flutter plugin for getting location updates even when the app is killed.'
   s.description      = <<-DESC
 A new Flutter plugin.
@@ -16,5 +16,5 @@ A new Flutter plugin.
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '13.0'
 end

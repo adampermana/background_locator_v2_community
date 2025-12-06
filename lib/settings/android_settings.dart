@@ -1,5 +1,5 @@
-import 'package:background_locator_2/keys.dart';
-import 'package:background_locator_2/settings/locator_settings.dart';
+import 'package:background_locator_v2_community/keys.dart';
+import 'package:background_locator_v2_community/settings/locator_settings.dart';
 import 'package:flutter/material.dart';
 
 enum LocationClient { google, android }
@@ -78,7 +78,7 @@ class AndroidSettings extends LocatorSettings {
       Keys.SETTINGS_ANDROID_NOTIFICATION_ICON:
           androidNotificationSettings.notificationIcon,
       Keys.SETTINGS_ANDROID_NOTIFICATION_ICON_COLOR:
-          androidNotificationSettings.notificationIconColor.value,
+          androidNotificationSettings.notificationIconColor.toARGB32(),
       Keys.SETTINGS_ANDROID_LOCATION_CLIENT: client.index
     };
   }

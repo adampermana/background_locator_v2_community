@@ -1,3 +1,21 @@
+## 2.1.0
+* Breaking changes: Minimum Flutter version is now Flutter 3.24.5 (Dart 3.5.4).
+* Updated Android support to API 36 (Android 15+)
+* Updated iOS deployment target to 13.0
+* Updated Kotlin to 2.1.0
+* Updated Android Gradle Plugin to 8.3.2
+* Updated Gradle to 8.7
+* Migrated to new LocationRequest.Builder API
+* Migrated to Priority constants for location accuracy
+* Added 16 KB page size support for Android 15+
+* Updated dependencies: Play Services Location 21.3.0, Gson 2.13.2, Material 1.13.0
+* Replaced deprecated jcenter() with mavenCentral()
+* Updated Java/Kotlin target to version 11
+* Migrated from deprecated lintOptions to lint DSL
+* Migrated from compileSdkVersion to compileSdk
+* Migrated from minSdkVersion to minSdk
+
+## 2.0.7
 * Fixed compatibility with Android Gradle Plugin 8.0+
 * Added namespace to Android build.gradle
 * Fixed JVM target compatibility between Java and Kotlin
@@ -30,10 +48,10 @@
 
 ## 2.0.4-dev.1
 * Fixing iOS build
-* Replacing package:background_locator_2 by background_locator_2
+* Replacing package:background_locator_v2_community by background_locator_v2_community
 
 ## 2.0.3
-* Replacing background_locator by background_locator_2 **(BREAKING CHANGE)**
+* Replacing background_locator by background_locator_v2_community **(BREAKING CHANGE)**
 * Replacing rekab by yukams
 
 ## 2.0.2

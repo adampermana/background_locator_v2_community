@@ -1,6 +1,6 @@
 //
 //  InitPluggable.h
-//  background_locator_2
+//  background_locator_v2_community
 //
 //  Created by Mehdok on 6/7/21.
 //

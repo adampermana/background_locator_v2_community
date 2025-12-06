@@ -1,4 +1,4 @@
-group 'yukams.app.background_locator_2'
+group 'yukams.app.background_locator_v2_community'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -25,7 +25,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace 'yukams.app.background_locator_2'
+    namespace 'yukams.app.background_locator_v2_community'
 
     compileSdk 36
 
