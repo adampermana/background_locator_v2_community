@@ -33,7 +33,7 @@ class BackgroundLocatorPlugin
         private var channel: MethodChannel? = null
 
         @JvmStatic
-        private fun sendResultWithDelay(context: Context, result: Result?, value: Boolean, delay: Long) {
+        private fun sendResultWithDelay(context: Context, result: MethodChannel.Result?, value: Boolean, delay: Long) {
             context.mainLooper.let {
                 Handler(it).postDelayed({
                     result?.success(value)
@@ -45,7 +45,7 @@ class BackgroundLocatorPlugin
         @JvmStatic
         private fun registerLocator(context: Context,
                                     args: Map<Any, Any>,
-                                    result: Result?) {
+                                    result: MethodChannel.Result?) {
             if (IsolateHolderService.Companion.isServiceRunning) {
                 // The service is running already
                 Log.d("BackgroundLocatorPlugin", "Locator service is already running")
@@ -156,7 +156,7 @@ class BackgroundLocatorPlugin
         }
 
         @JvmStatic
-        private fun unRegisterPlugin(context: Context, result: Result?) {
+        private fun unRegisterPlugin(context: Context, result: MethodChannel.Result?) {
             if (!IsolateHolderService.Companion.isServiceRunning) {
                 // The service is not running
                 Log.d("BackgroundLocatorPlugin", "Locator service is not running, nothing to stop")
@@ -173,7 +173,7 @@ class BackgroundLocatorPlugin
         }
 
         @JvmStatic
-        private fun isServiceRunning(result: Result?) {
+        private fun isServiceRunning(result: MethodChannel.Result?) {
             result?.success(IsolateHolderService.Companion.isServiceRunning)
         }
 
@@ -227,7 +227,7 @@ class BackgroundLocatorPlugin
         }
     }
 
-    override fun onMethodCall(call: MethodCall, result: Result) {
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             Keys.Companion.METHOD_PLUGIN_INITIALIZE_SERVICE -> {
                 val args: Map<Any, Any>? = call.arguments()
