@@ -28,7 +28,7 @@ class LocationParserUtil {
                 put(Keys.ARG_SPEED_ACCURACY, speedAccuracy)
                 put(Keys.ARG_HEADING, location.bearing)
                 put(Keys.ARG_TIME, location.time.toDouble())
-                put(Keys.ARG_PROVIDER, location.provider)
+                put(Keys.ARG_PROVIDER, location.provider ?: "unknown")
             }
         }
 
