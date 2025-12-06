@@ -1,4 +1,4 @@
-package yukams.app.background_locator_v2_community
+package yukams.app.background_locator_2
 
 import android.content.BroadcastReceiver
 import android.content.Context

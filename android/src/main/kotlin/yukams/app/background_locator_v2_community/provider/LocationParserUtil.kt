@@ -1,9 +1,9 @@
-package yukams.app.background_locator_v2_community.provider
+package yukams.app.background_locator_2.provider
 
 import android.location.Location
 import android.os.Build
 import com.google.android.gms.location.LocationResult
-import yukams.app.background_locator_v2_community.Keys
+import yukams.app.background_locator_2.Keys
 import java.util.HashMap
 
 class LocationParserUtil {
@@ -18,7 +18,7 @@ class LocationParserUtil {
                 isMocked = location.isFromMockProvider
             }
 
-            return hashMapOf<Any, Any>(
+            return hashMapOf(
                     Keys.ARG_IS_MOCKED to isMocked,
                     Keys.ARG_LATITUDE to location.latitude,
                     Keys.ARG_LONGITUDE to location.longitude,
@@ -28,7 +28,7 @@ class LocationParserUtil {
                     Keys.ARG_SPEED_ACCURACY to speedAccuracy,
                     Keys.ARG_HEADING to location.bearing,
                     Keys.ARG_TIME to location.time.toDouble(),
-                    Keys.ARG_PROVIDER to (location.provider as Any?),
+                    Keys.ARG_PROVIDER to location.provider,
             )
         }
 
@@ -44,7 +44,7 @@ class LocationParserUtil {
                 isMocked = firstLocation.isFromMockProvider
             }
 
-            return hashMapOf<Any, Any>(
+            return hashMapOf(
                     Keys.ARG_IS_MOCKED to isMocked,
                     Keys.ARG_LATITUDE to firstLocation.latitude,
                     Keys.ARG_LONGITUDE to firstLocation.longitude,

@@ -1,4 +1,4 @@
-package yukams.app.background_locator_v2_community.provider
+package yukams.app.background_locator_2.provider
 
 import java.util.HashMap
 

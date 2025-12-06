@@ -1,4 +1,4 @@
-package yukams.app.background_locator_v2_community
+package yukams.app.background_locator_2
 
 import android.Manifest
 import android.content.Context
@@ -7,14 +7,13 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.Priority
 import io.flutter.FlutterInjector
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.dart.DartExecutor
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.view.FlutterCallbackInformation
-import yukams.app.background_locator_v2_community.IsolateHolderService.Companion.isServiceInitialized
-import yukams.app.background_locator_v2_community.provider.LocationRequestOptions
+import yukams.app.background_locator_2.IsolateHolderService.Companion.isServiceInitialized
+import yukams.app.background_locator_2.provider.LocationRequestOptions
 import java.lang.RuntimeException
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -94,11 +93,11 @@ fun getLocationRequest(intent: Intent): LocationRequestOptions {
 
 fun getAccuracy(key: Int): Int {
     return when (key) {
-        0 -> Priority.PRIORITY_PASSIVE
-        1 -> Priority.PRIORITY_LOW_POWER
-        2 -> Priority.PRIORITY_BALANCED_POWER_ACCURACY
-        3 -> Priority.PRIORITY_BALANCED_POWER_ACCURACY
-        4 -> Priority.PRIORITY_HIGH_ACCURACY
-        else -> Priority.PRIORITY_HIGH_ACCURACY
+        0 -> LocationRequest.PRIORITY_NO_POWER
+        1 -> LocationRequest.PRIORITY_LOW_POWER
+        2 -> LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+        3 -> LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+        4 -> LocationRequest.PRIORITY_HIGH_ACCURACY
+        else -> LocationRequest.PRIORITY_HIGH_ACCURACY
     }
 }
