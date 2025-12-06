@@ -1,4 +1,4 @@
-package yukams.app.background_locator_2.provider
+package yukams.app.background_locator_v2_community.provider
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -18,15 +18,12 @@ class GoogleLocationProviderClient(context: Context, override var listener: Loca
     }
 
     private fun getLocationRequest(request: LocationRequestOptions): LocationRequest {
-        val locationRequest = LocationRequest.create()
-
-        locationRequest.interval = request.interval
-        locationRequest.fastestInterval = request.interval
-        locationRequest.maxWaitTime = request.interval
-        locationRequest.priority = request.accuracy
-        locationRequest.smallestDisplacement = request.distanceFilter
-
-        return locationRequest
+        return LocationRequest.Builder(request.interval)
+            .setMinUpdateIntervalMillis(request.interval)
+            .setMaxUpdateDelayMillis(request.interval)
+            .setPriority(request.accuracy)
+            .setMinUpdateDistanceMeters(request.distanceFilter)
+            .build()
     }
 }
 
