@@ -1,4 +1,4 @@
-package yukams.app.background_locator_2
+package yukams.app.background_locator_v2_community
 
 import android.app.*
 import android.Manifest
@@ -16,12 +16,17 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import yukams.app.background_locator_v2_community.DisposePluggable
-import yukams.app.background_locator_v2_community.InitPluggable
-import yukams.app.background_locator_v2_community.Pluggable
 import yukams.app.background_locator_2.provider.*
 import java.util.HashMap
 import androidx.core.app.ActivityCompat
+import yukams.app.background_locator_v2_community.pluggables.DisposePluggable
+import yukams.app.background_locator_v2_community.pluggables.InitPluggable
+import yukams.app.background_locator_v2_community.pluggables.Pluggable
+import yukams.app.background_locator_v2_community.provider.AndroidLocationProviderClient
+import yukams.app.background_locator_v2_community.provider.BLLocationProvider
+import yukams.app.background_locator_v2_community.provider.GoogleLocationProviderClient
+import yukams.app.background_locator_v2_community.provider.LocationClient
+import yukams.app.background_locator_v2_community.provider.LocationUpdateListener
 
 class IsolateHolderService : MethodChannel.MethodCallHandler, LocationUpdateListener, Service() {
     companion object {
@@ -85,7 +90,7 @@ class IsolateHolderService : MethodChannel.MethodCallHandler, LocationUpdateList
     }
 
     private fun start() {
-        (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+        (getSystemService(POWER_SERVICE) as PowerManager).run {
             newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_TAG).apply {
                 setReferenceCounted(false)
                 acquire(wakeLockTime)
@@ -105,23 +110,23 @@ class IsolateHolderService : MethodChannel.MethodCallHandler, LocationUpdateList
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Notification channel is available in Android O and up
             val channel = NotificationChannel(
-                Keys.CHANNEL_ID, notificationChannelName,
+                Keys.Companion.CHANNEL_ID, notificationChannelName,
                 NotificationManager.IMPORTANCE_LOW
             )
 
-            (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
                 .createNotificationChannel(channel)
         }
 
         val intent = Intent(this, getMainActivityClass(this))
-        intent.action = Keys.NOTIFICATION_ACTION
+        intent.action = Keys.Companion.NOTIFICATION_ACTION
 
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
             this,
             1, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        return NotificationCompat.Builder(this, Keys.CHANNEL_ID)
+        return NotificationCompat.Builder(this, Keys.Companion.CHANNEL_ID)
             .setContentTitle(notificationTitle)
             .setContentText(notificationMsg)
             .setStyle(
@@ -179,31 +184,31 @@ class IsolateHolderService : MethodChannel.MethodCallHandler, LocationUpdateList
     private fun startHolderService(intent: Intent) {
         Log.e("IsolateHolderService", "startHolderService")
         notificationChannelName =
-            intent.getStringExtra(Keys.SETTINGS_ANDROID_NOTIFICATION_CHANNEL_NAME).toString()
+            intent.getStringExtra(Keys.Companion.SETTINGS_ANDROID_NOTIFICATION_CHANNEL_NAME).toString()
         notificationTitle =
-            intent.getStringExtra(Keys.SETTINGS_ANDROID_NOTIFICATION_TITLE).toString()
-        notificationMsg = intent.getStringExtra(Keys.SETTINGS_ANDROID_NOTIFICATION_MSG).toString()
+            intent.getStringExtra(Keys.Companion.SETTINGS_ANDROID_NOTIFICATION_TITLE).toString()
+        notificationMsg = intent.getStringExtra(Keys.Companion.SETTINGS_ANDROID_NOTIFICATION_MSG).toString()
         notificationBigMsg =
-            intent.getStringExtra(Keys.SETTINGS_ANDROID_NOTIFICATION_BIG_MSG).toString()
+            intent.getStringExtra(Keys.Companion.SETTINGS_ANDROID_NOTIFICATION_BIG_MSG).toString()
         val iconNameDefault = "ic_launcher"
-        var iconName = intent.getStringExtra(Keys.SETTINGS_ANDROID_NOTIFICATION_ICON)
+        var iconName = intent.getStringExtra(Keys.Companion.SETTINGS_ANDROID_NOTIFICATION_ICON)
         if (iconName == null || iconName.isEmpty()) {
             iconName = iconNameDefault
         }
         icon = resources.getIdentifier(iconName, "mipmap", packageName)
         notificationIconColor =
-            intent.getLongExtra(Keys.SETTINGS_ANDROID_NOTIFICATION_ICON_COLOR, 0).toInt()
-        wakeLockTime = intent.getIntExtra(Keys.SETTINGS_ANDROID_WAKE_LOCK_TIME, 60) * 60 * 1000L
+            intent.getLongExtra(Keys.Companion.SETTINGS_ANDROID_NOTIFICATION_ICON_COLOR, 0).toInt()
+        wakeLockTime = intent.getIntExtra(Keys.Companion.SETTINGS_ANDROID_WAKE_LOCK_TIME, 60) * 60 * 1000L
 
         locatorClient = context?.let { getLocationClient(it) }
         locatorClient?.requestLocationUpdates(getLocationRequest(intent))
 
         // Fill pluggable list
-        if (intent.hasExtra(Keys.SETTINGS_INIT_PLUGGABLE)) {
+        if (intent.hasExtra(Keys.Companion.SETTINGS_INIT_PLUGGABLE)) {
             pluggables.add(InitPluggable())
         }
 
-        if (intent.hasExtra(Keys.SETTINGS_DISPOSABLE_PLUGGABLE)) {
+        if (intent.hasExtra(Keys.Companion.SETTINGS_DISPOSABLE_PLUGGABLE)) {
             pluggables.add(DisposePluggable())
         }
 
@@ -212,7 +217,7 @@ class IsolateHolderService : MethodChannel.MethodCallHandler, LocationUpdateList
 
     private fun shutdownHolderService() {
         Log.e("IsolateHolderService", "shutdownHolderService")
-        (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+        (getSystemService(POWER_SERVICE) as PowerManager).run {
             newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_TAG).apply {
                 if (isHeld) {
                     release()
@@ -231,24 +236,24 @@ class IsolateHolderService : MethodChannel.MethodCallHandler, LocationUpdateList
 
     private fun updateNotification(intent: Intent) {
         Log.e("IsolateHolderService", "updateNotification")
-        if (intent.hasExtra(Keys.SETTINGS_ANDROID_NOTIFICATION_TITLE)) {
+        if (intent.hasExtra(Keys.Companion.SETTINGS_ANDROID_NOTIFICATION_TITLE)) {
             notificationTitle =
-                intent.getStringExtra(Keys.SETTINGS_ANDROID_NOTIFICATION_TITLE).toString()
+                intent.getStringExtra(Keys.Companion.SETTINGS_ANDROID_NOTIFICATION_TITLE).toString()
         }
 
-        if (intent.hasExtra(Keys.SETTINGS_ANDROID_NOTIFICATION_MSG)) {
+        if (intent.hasExtra(Keys.Companion.SETTINGS_ANDROID_NOTIFICATION_MSG)) {
             notificationMsg =
-                intent.getStringExtra(Keys.SETTINGS_ANDROID_NOTIFICATION_MSG).toString()
+                intent.getStringExtra(Keys.Companion.SETTINGS_ANDROID_NOTIFICATION_MSG).toString()
         }
 
-        if (intent.hasExtra(Keys.SETTINGS_ANDROID_NOTIFICATION_BIG_MSG)) {
+        if (intent.hasExtra(Keys.Companion.SETTINGS_ANDROID_NOTIFICATION_BIG_MSG)) {
             notificationBigMsg =
-                intent.getStringExtra(Keys.SETTINGS_ANDROID_NOTIFICATION_BIG_MSG).toString()
+                intent.getStringExtra(Keys.Companion.SETTINGS_ANDROID_NOTIFICATION_BIG_MSG).toString()
         }
 
         val notification = getNotification()
         val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(notificationId, notification)
     }
 
@@ -268,7 +273,7 @@ class IsolateHolderService : MethodChannel.MethodCallHandler, LocationUpdateList
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         try {
             when (call.method) {
-                Keys.METHOD_SERVICE_INITIALIZED -> {
+                Keys.Companion.METHOD_SERVICE_INITIALIZED -> {
                     isServiceRunning = true
                 }
                 else -> result.notImplemented()
@@ -287,7 +292,7 @@ class IsolateHolderService : MethodChannel.MethodCallHandler, LocationUpdateList
 
 
     private fun getLocationClient(context: Context): BLLocationProvider {
-        return when (PreferencesManager.getLocationClient(context)) {
+        return when (PreferencesManager.Companion.getLocationClient(context)) {
             LocationClient.Google -> GoogleLocationProviderClient(context, this)
             LocationClient.Android -> AndroidLocationProviderClient(context, this)
         }
@@ -308,16 +313,16 @@ class IsolateHolderService : MethodChannel.MethodCallHandler, LocationUpdateList
             if (location != null) {
                 val callback =
                     context?.let {
-                        PreferencesManager.getCallbackHandle(
+                        PreferencesManager.Companion.getCallbackHandle(
                             it,
-                            Keys.CALLBACK_HANDLE_KEY
+                            Keys.Companion.CALLBACK_HANDLE_KEY
                         )
                     } as Long
 
                 val result: HashMap<Any, Any> =
                     hashMapOf(
-                        Keys.ARG_CALLBACK to callback,
-                        Keys.ARG_LOCATION to location
+                        Keys.Companion.ARG_CALLBACK to callback,
+                        Keys.Companion.ARG_LOCATION to location
                     )
 
                 sendLocationEvent(result)
@@ -338,12 +343,12 @@ class IsolateHolderService : MethodChannel.MethodCallHandler, LocationUpdateList
                 val backgroundChannel =
                     MethodChannel(
                         getBinaryMessenger(it)!!,
-                        Keys.BACKGROUND_CHANNEL_ID
+                        Keys.Companion.BACKGROUND_CHANNEL_ID
                     )
                 Handler(it.mainLooper)
                     .post {
                         Log.d("plugin", "sendLocationEvent $result")
-                        backgroundChannel.invokeMethod(Keys.BCM_SEND_LOCATION, result)
+                        backgroundChannel.invokeMethod(Keys.Companion.BCM_SEND_LOCATION, result)
                     }
             }
         }
