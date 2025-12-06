@@ -19,16 +19,16 @@ class LocationParserUtil {
             }
 
             return HashMap<Any, Any>().apply {
-                put(Keys.ARG_IS_MOCKED, isMocked)
-                put(Keys.ARG_LATITUDE, location.latitude)
-                put(Keys.ARG_LONGITUDE, location.longitude)
-                put(Keys.ARG_ACCURACY, location.accuracy)
-                put(Keys.ARG_ALTITUDE, location.altitude)
-                put(Keys.ARG_SPEED, location.speed)
-                put(Keys.ARG_SPEED_ACCURACY, speedAccuracy)
-                put(Keys.ARG_HEADING, location.bearing)
-                put(Keys.ARG_TIME, location.time.toDouble())
-                put(Keys.ARG_PROVIDER, location.provider ?: "unknown")
+                put(Keys.Companion.ARG_IS_MOCKED, isMocked)
+                put(Keys.Companion.ARG_LATITUDE, location.latitude)
+                put(Keys.Companion.ARG_LONGITUDE, location.longitude)
+                put(Keys.Companion.ARG_ACCURACY, location.accuracy)
+                put(Keys.Companion.ARG_ALTITUDE, location.altitude)
+                put(Keys.Companion.ARG_SPEED, location.speed)
+                put(Keys.Companion.ARG_SPEED_ACCURACY, speedAccuracy)
+                put(Keys.Companion.ARG_HEADING, location.bearing)
+                put(Keys.Companion.ARG_TIME, location.time.toDouble())
+                put(Keys.Companion.ARG_PROVIDER, location.provider ?: "unknown")
             }
         }
 
@@ -45,15 +45,15 @@ class LocationParserUtil {
             }
 
             return HashMap<Any, Any>().apply {
-                put(Keys.ARG_IS_MOCKED, isMocked)
-                put(Keys.ARG_LATITUDE, firstLocation.latitude)
-                put(Keys.ARG_LONGITUDE, firstLocation.longitude)
-                put(Keys.ARG_ACCURACY, firstLocation.accuracy)
-                put(Keys.ARG_ALTITUDE, firstLocation.altitude)
-                put(Keys.ARG_SPEED, firstLocation.speed)
-                put(Keys.ARG_SPEED_ACCURACY, speedAccuracy)
-                put(Keys.ARG_HEADING, firstLocation.bearing)
-                put(Keys.ARG_TIME, firstLocation.time.toDouble())
+                put(Keys.Companion.ARG_IS_MOCKED, isMocked)
+                put(Keys.Companion.ARG_LATITUDE, firstLocation.latitude)
+                put(Keys.Companion.ARG_LONGITUDE, firstLocation.longitude)
+                put(Keys.Companion.ARG_ACCURACY, firstLocation.accuracy)
+                put(Keys.Companion.ARG_ALTITUDE, firstLocation.altitude)
+                put(Keys.Companion.ARG_SPEED, firstLocation.speed)
+                put(Keys.Companion.ARG_SPEED_ACCURACY, speedAccuracy)
+                put(Keys.Companion.ARG_HEADING, firstLocation.bearing)
+                put(Keys.Companion.ARG_TIME, firstLocation.time.toDouble())
             }
         }
     }
