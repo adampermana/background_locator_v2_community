@@ -24,8 +24,7 @@ To use this fork in your Flutter project, add the following to your `pubspec.yam
 dependencies:
   background_locator_v2_community:
     git:
-      url: https://github.com/sultan18kh/background_locator_2_gradle_migration.git
-      ref: fix/gradle-compatibility
+      url: https://github.com/adampermana/background_locator_v2_community.git
 ```
 
 ![demo](https://raw.githubusercontent.com/RomanJos/background_locator/master/demo.gif)
